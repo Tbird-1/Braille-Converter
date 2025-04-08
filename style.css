@@ -1,65 +1,75 @@
-/* Global Styles */
-body {
-  font-family: "Helvetica Neue", sans-serif;
-  background-color: #f5f5f7;
-  color: #333;
-  text-align: center;
+/* Basic Reset */
+* {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 
+/* Body Styling */
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background-color: #f4f4f4;
+  color: #333;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+/* Container Styling */
 .container {
-  padding: 20px;
-  max-width: 600px;
-  margin: 50px auto;
   background-color: #fff;
+  padding: 30px;
   border-radius: 12px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  width: 100%;
+  max-width: 600px;
 }
 
+/* Title Styling */
 h1 {
-  font-size: 2em;
-  color: #007aff;
+  font-size: 2rem;
+  margin-bottom: 20px;
 }
 
+/* Textarea Styling */
 textarea {
   width: 100%;
   height: 150px;
-  padding: 12px;
-  font-size: 16px;
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
   border-radius: 8px;
-  border: 1px solid #ddd;
+  margin-bottom: 20px;
+  resize: none;
   outline: none;
-  margin: 20px 0;
-  box-sizing: border-box;
-  transition: border-color 0.3s;
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
 }
 
-textarea:focus {
-  border-color: #007aff;
-}
-
+/* Button Styling */
 button {
-  padding: 12px 24px;
-  font-size: 16px;
   background-color: #007aff;
   color: white;
   border: none;
+  padding: 12px 25px;
   border-radius: 8px;
+  font-size: 1rem;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s ease;
 }
 
 button:hover {
   background-color: #0051a8;
 }
 
+/* Output Styling */
 .output {
   margin-top: 20px;
-  font-size: 20px;
-  padding: 20px;
-  background-color: #eee;
-  border-radius: 8px;
+  font-size: 1.2rem;
   white-space: pre-wrap;
-  box-sizing: border-box;
+  word-wrap: break-word;
+  font-family: 'Courier New', Courier, monospace;
+  color: #444;
 }
