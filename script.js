@@ -1,31 +1,26 @@
-// Braille alphabet mapping
-const brailleAlphabet = {
-  'a': '⠁', 'b': '⠃', 'c': '⠉', 'd': '⠙', 'e': '⠑',
-  'f': '⠋', 'g': '⠛', 'h': '⠓', 'i': '⠊', 'j': '⠚',
-  'k': '⠅', 'l': '⠇', 'm': '⠍', 'n': '⠝', 'o': '⠕',
-  'p': '⠏', 'q': '⠟', 'r': '⠗', 's': '⠎', 't': '⠞',
-  'u': '⠥', 'v': '⠧', 'w': '⠺', 'x': '⠭', 'y': '⠽', 'z': '⠵',
-  ' ': '⠄', '.': '⠲', ',': '⠂', '?': '⠦', "'": '⠄⠴',
-  '"': '⠄⠲⠂', '(': '⠪', ')': '⠫', '!': '⠖', '-': '⠤',
-  ':': '⠉⠲', ';': '⠆', '/': '⠌', '\\': '⠸', '_': '⠍⠆'
-};
+document.getElementById("convertButton").addEventListener("click", function() {
+  convertToBraille();
+});
 
-// Function to handle capitalization and convert text to Braille
-function textToBraille(text) {
-  function convertToBrailleCharacter(char) {
-    if (char === char.toUpperCase() && char !== ' ' && brailleAlphabet[char.toLowerCase()]) {
-      return '⠠' + brailleAlphabet[char.toLowerCase()]; // Capital sign (⠠) + Braille letter
-    }
-    return brailleAlphabet[char] || '';  // Default conversion for lowercase and punctuation
-  }
-
-  // Convert each character in the input text to Braille
-  return text.split('').map(convertToBrailleCharacter).join('');
+function convertToBraille() {
+  const inputText = document.getElementById("inputText").value;
+  const brailleOutput = document.getElementById("brailleOutput");
+  const brailleText = textToBraille(inputText);
+  brailleOutput.textContent = brailleText; // Display the Braille output
 }
 
-// Event listener for button click to convert text input to Braille
-document.getElementById("convertButton").addEventListener("click", function() {
-  const inputText = document.getElementById("inputText").value; // Get input text
-  const brailleText = textToBraille(inputText);  // Convert text to Braille
-  document.getElementById("brailleOutput").innerText = brailleText;  // Display Braille output
-});
+function textToBraille(text) {
+  const brailleMap = {
+    "a": "⠁", "b": "⠃", "c": "⠉", "d": "⠙", "e": "⠑", "f": "⠋", "g": "⠛", "h": "⠓", "i": "⠊", "j": "⠚",
+    "k": "⠅", "l": "⠇", "m": "⠍", "n": "⠝", "o": "⠕", "p": "⠏", "q": "⠟", "r": "⠗", "s": "⠎", "t": "⠞",
+    "u": "⠥", "v": "⠧", "w": "⠺", "x": "⠭", "y": "⠽", "z": "⠵", " ": "⠄", ".": "⠲", ",": "⠂", "!": "⠖",
+    "?": "⠦", "-": "⠤", "_": "⠠"
+  };
+  
+  let braille = "";
+  for (let i = 0; i < text.length; i++) {
+    let char = text[i].toLowerCase();
+    braille += brailleMap[char] || ""; // Add Braille equivalent or empty if no match
+  }
+  return braille;
+}
