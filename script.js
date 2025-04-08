@@ -1,17 +1,31 @@
-// script.js
-const brailleMap = {
-  a: '\u2801', b: '\u2803', c: '\u2809', d: '\u2819', e: '\u2811',
-  f: '\u280B', g: '\u281B', h: '\u2813', i: '\u280A', j: '\u281A',
-  k: '\u2805', l: '\u2807', m: '\u280D', n: '\u281D', o: '\u2815',
-  p: '\u280F', q: '\u281F', r: '\u2817', s: '\u280E', t: '\u281E',
-  u: '\u2825', v: '\u2827', w: '\u283A', x: '\u282D', y: '\u283D', z: '\u2835',
-  ' ': ' '
+// Braille alphabet mapping
+const brailleAlphabet = {
+  'a': '⠁', 'b': '⠃', 'c': '⠉', 'd': '⠙', 'e': '⠑',
+  'f': '⠋', 'g': '⠛', 'h': '⠓', 'i': '⠊', 'j': '⠚',
+  'k': '⠅', 'l': '⠇', 'm': '⠍', 'n': '⠝', 'o': '⠕',
+  'p': '⠏', 'q': '⠟', 'r': '⠗', 's': '⠎', 't': '⠞',
+  'u': '⠥', 'v': '⠧', 'w': '⠺', 'x': '⠭', 'y': '⠽', 'z': '⠵',
+  ' ': '⠄', '.': '⠲', ',': '⠂', '?': '⠦', "'": '⠄⠴',
+  '"': '⠄⠲⠂', '(': '⠪', ')': '⠫', '!': '⠖', '-': '⠤',
+  ':': '⠉⠲', ';': '⠆', '/': '⠌', '\\': '⠸', '_': '⠍⠆'
 };
-function convertToBraille() {
-  const input = document.getElementById('englishText').value.toLowerCase();
-  let braille = '';
-  for (let char of input) {
-    braille += eval(`'${brailleMap[char] || '?'}'`);
+
+// Function to handle capitalization and convert text to Braille
+function textToBraille(text) {
+  function convertToBrailleCharacter(char) {
+    if (char === char.toUpperCase() && char !== ' ' && brailleAlphabet[char.toLowerCase()]) {
+      return '⠠' + brailleAlphabet[char.toLowerCase()]; // Capital sign (⠠) + Braille letter
+    }
+    return brailleAlphabet[char] || '';  // Default conversion for lowercase and punctuation
   }
-  document.getElementById('brailleOutput').textContent = braille;
+
+  // Convert each character in the input text to Braille
+  return text.split('').map(convertToBrailleCharacter).join('');
 }
+
+// Event listener for button click to convert text input to Braille
+document.getElementById("convertButton").addEventListener("click", function() {
+  const inputText = document.getElementById("inputText").value; // Get input text
+  const brailleText = textToBraille(inputText);  // Convert text to Braille
+  document.getElementById("brailleOutput").innerText = brailleText;  // Display Braille output
+});
