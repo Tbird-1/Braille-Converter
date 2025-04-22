@@ -1,19 +1,20 @@
 <!DOCTYPE html>
- <html lang="en">
- <head>
-   <meta charset="UTF-8" />
-   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-   <title>English to Braille Converter</title>
-   <link rel="stylesheet" href="style.css" />
- </head>
- <body>
-   <div class="container">
-     <h1>English to Braille Converter</h1>
-     <textarea id="englishText" placeholder="Type English text here..."></textarea>
-     <button onclick="convertToBraille()">Convert to Braille</button>
-     <h2>Braille Output:</h2>
-     <div id="brailleOutput"></div>
-   </div>
-   <script src="script.js"></script>
- </body>
- </html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>English to Braille Converter</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>English to Braille Converter</h1>
+    <textarea id="englishText" placeholder="Type English text here..."></textarea>
+    <button id="convertButton">Convert to Braille</button>
+    <h2>Braille Output:</h2>
+    <div id="brailleOutput"></div>
+    <p id="errorMessage" class="error-message"></p>
+  </div>
+  <script defer src="script.js"></script>
+</body>
+</html>
