@@ -1,17 +1,29 @@
-// script.js
- const brailleMap = {
-   a: '\u2801', b: '\u2803', c: '\u2809', d: '\u2819', e: '\u2811',
-   f: '\u280B', g: '\u281B', h: '\u2813', i: '\u280A', j: '\u281A',
-   k: '\u2805', l: '\u2807', m: '\u280D', n: '\u281D', o: '\u2815',
-   p: '\u280F', q: '\u281F', r: '\u2817', s: '\u280E', t: '\u281E',
-   u: '\u2825', v: '\u2827', w: '\u283A', x: '\u282D', y: '\u283D', z: '\u2835',
-   ' ': ' '
- };
- function convertToBraille() {
-   const input = document.getElementById('englishText').value.toLowerCase();
-   let braille = '';
-   for (let char of input) {
-     braille += eval(`'${brailleMap[char] || '?'}'`);
-   }
-   document.getElementById('brailleOutput').textContent = braille;
- }
+// Updated script.js with punctuation support
+
+const brailleMap = {
+  "a": "⠁", "b": "⠃", "c": "⠉", "d": "⠙", "e": "⠑",
+  "f": "⠋", "g": "⠛", "h": "⠓", "i": "⠊", "j": "⠚",
+  "k": "⠅", "l": "⠇", "m": "⠍", "n": "⠝", "o": "⠕",
+  "p": "⠏", "q": "⠟", "r": "⠗", "s": "⠎", "t": "⠞",
+  "u": "⠥", "v": "⠧", "w": "⠺", "x": "⠭", "y": "⠽", "z": "⠵",
+  "1": "⠁", "2": "⠃", "3": "⠉", "4": "⠙", "5": "⠑",
+  "6": "⠋", "7": "⠛", "8": "⠓", "9": "⠊", "0": "⠚",
+  " ": " ", "\n": "\n",
+  ",": "⠂", ".": "⠲", "?": "⠦", "!": "⠖",
+  "-": "⠤", "'": "⠄", ":": "⠒", ";": "⠆",
+  "(": "⠦", ")": "⠴", "/": "⠌", "\"": "⠶"
+};
+
+function convertToBraille(text) {
+  return text
+    .toLowerCase()
+    .split("")
+    .map(char => brailleMap[char] || char)
+    .join("");
+}
+
+document.getElementById("convertButton").addEventListener("click", () => {
+  const input = document.getElementById("inputText").value;
+  const output = convertToBraille(input);
+  document.getElementById("brailleOutput").textContent = output;
+});
