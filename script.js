@@ -84,7 +84,7 @@ function translateToBraille(input) {
     return '⠼' + match.split('').map(d => brailleMap[d]).join('');
   });
 
-  // Handle fractions (e.g., 1/2), stricter matching
+  // Handle fractions (e.g., 1/2)
   input = input.replace(/^\d+\/\d+$/gm, (match) => {
     const [num, denom] = match.split('/');
     let braille = '⠼';
@@ -113,24 +113,25 @@ function translateToBraille(input) {
   return brailleOutput;
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+try {
   const convertButton = document.getElementById('convertButton');
-  if (!convertButton) {
-    console.error("Button with ID 'convertButton' not found.");
-    return;
+  const input = document.getElementById('englishText');
+  const outputDiv = document.getElementById('brailleOutput');
+  const errorDiv = document.getElementById('errorMessage');
+
+  if (!convertButton || !input || !outputDiv || !errorDiv) {
+    console.error("One or more DOM elements not found:", {
+      convertButton: !!convertButton,
+      input: !!input,
+      outputDiv: !!outputDiv,
+      errorDiv: !!errorDiv
+    });
+    throw new Error("Page setup incomplete. Please refresh and try again.");
   }
 
+  console.log("Script loaded successfully, binding event listener.");
   convertButton.addEventListener('click', () => {
     console.log("Convert button clicked.");
-    const input = document.getElementById('englishText');
-    const outputDiv = document.getElementById('brailleOutput');
-    const errorDiv = document.getElementById('errorMessage');
-
-    if (!input || !outputDiv || !errorDiv) {
-      console.error("One or more DOM elements not found.");
-      return;
-    }
-
     errorDiv.textContent = '';
     outputDiv.textContent = '';
 
@@ -139,6 +140,13 @@ document.addEventListener('DOMContentLoaded', () => {
       outputDiv.textContent = braille;
     } catch (error) {
       errorDiv.textContent = error.message;
+      console.error("Conversion error:", error.message);
     }
   });
-});
+} catch (error) {
+  console.error("Initialization error:", error.message);
+  const errorDiv = document.getElementById('errorMessage');
+  if (errorDiv) {
+    errorDiv.textContent = "Error loading converter. Please refresh the page.";
+  }
+}
