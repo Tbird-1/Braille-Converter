@@ -27,7 +27,7 @@ const contractions = [
   { word: "of", braille: '⠷' },
   { word: "to", braille: '⠞' },
   { word: "by", braille: '⠃⠽' },
-  { word: "be", braille: '⠃' },
+  { word: "be", braille: '⠃⠑' }, // Adjusted to avoid partial word matches
   { word: "his", braille: '⠓' },
   { word: "was", braille: '⠺' },
   { word: "in", braille: '⠔' },
@@ -53,8 +53,14 @@ function correctSpelling(text) {
 function applyContractions(text) {
   const sortedContractions = contractions.sort((a, b) => b.word.length - a.word.length);
   for (let { word, braille } of sortedContractions) {
-    const regex = new RegExp(`\\b${word.replace('.', '\\.')}\\b`, 'g');
-    text = text.replace(regex, braille);
+    const regex = new RegExp(`\\b${word.replace('.', '\\.')}\\b`, 'i');
+    text = text.replace(regex, (match) => {
+      // Preserve case for proper nouns in contractions
+      if (match[0] === match[0].toUpperCase()) {
+        return '⠠' + braille;
+      }
+      return braille;
+    });
   }
   return text;
 }
@@ -64,8 +70,10 @@ function translateToBraille(input) {
     throw new Error("Please enter text to convert.");
   }
 
+  let unmappedChars = new Set();
   input = correctSpelling(input);
 
+  // Handle decimals (e.g., 98.76)
   input = input.replace(/\b(\d+\.\d+)\b/g, (match) => {
     const [integer, decimal] = match.split('.');
     let braille = '⠼';
@@ -75,11 +83,14 @@ function translateToBraille(input) {
     return braille;
   });
 
+  // Handle integers (e.g., 123)
   input = input.replace(/\b(\d+)\b/g, (match) => {
     return '⠼' + match.split('').map(d => brailleMap[d]).join('');
   });
 
-  input = input.replace(/\b(\d+)\/(\d+)\b/g, (match, num, denom) => {
+  // Handle fractions (e.g., 1/2), stricter matching
+  input = input.replace(/^\d+\/\d+$/gm, (match) => {
+    const [num, denom] = match.split('/');
     let braille = '⠼';
     braille += num.split('').map(d => brailleMap[d]).join('');
     braille += '⠌';
@@ -91,24 +102,47 @@ function translateToBraille(input) {
 
   let brailleOutput = '';
   for (let char of input) {
-    brailleOutput += brailleMap[char] || '⍰';
+    if (brailleMap[char] !== undefined) {
+      brailleOutput += brailleMap[char];
+    } else {
+      unmappedChars.add(char);
+      brailleOutput += '⍰';
+    }
+  }
+
+  if (unmappedChars.size > 0) {
+    console.warn("Unmapped characters:", Array.from(unmappedChars));
   }
 
   return brailleOutput;
 }
 
-document.getElementById('convertButton').addEventListener('click', () => {
-  const input = document.getElementById('englishText').value;
-  const outputDiv = document.getElementById('brailleOutput');
-  const errorDiv = document.getElementById('errorMessage');
-
-  errorDiv.textContent = '';
-  outputDiv.textContent = '';
-
-  try {
-    const braille = translateToBraille(input);
-    outputDiv.textContent = braille;
-  } catch (error) {
-    errorDiv.textContent = error.message;
+document.addEventListener('DOMContentLoaded', () => {
+  const convertButton = document.getElementById('convertButton');
+  if (!convertButton) {
+    console.error("Button with ID 'convertButton' not found.");
+    return;
   }
+
+  convertButton.addEventListener('click', () => {
+    console.log("Convert button clicked.");
+    const input = document.getElementById('englishText');
+    const outputDiv = document.getElementById('brailleOutput');
+    const errorDiv = document.getElementById('errorMessage');
+
+    if (!input || !outputDiv || !errorDiv) {
+      console.error("One or more DOM elements not found.");
+      return;
+    }
+
+    errorDiv.textContent = '';
+    outputDiv.textContent = '';
+
+    try {
+      const braille = translateToBraille(input.value);
+      outputDiv.textContent = braille;
+    } catch (error) {
+      errorDiv.textContent = error.message;
+    }
+  });
 });
