@@ -27,7 +27,7 @@ const contractions = [
   { word: "of", braille: '⠷' },
   { word: "to", braille: '⠞' },
   { word: "by", braille: '⠃⠽' },
-  { word: "be", braille: '⠃⠑' }, // Adjusted to avoid partial word matches
+  { word: "be", braille: '⠃⠑' },
   { word: "his", braille: '⠓' },
   { word: "was", braille: '⠺' },
   { word: "in", braille: '⠔' },
@@ -44,24 +44,20 @@ const corrections = {
 
 function correctSpelling(text) {
   for (let misspelled in corrections) {
-    const regex = new RegExp(`\\b${misspelled}\\b`, 'gi');
+    const regex = new RegExp(`\\b${misspelled}\\b`, 'g');
     text = text.replace(regex, corrections[misspelled]);
   }
+  console.log("After spelling correction:", text);
   return text;
 }
 
 function applyContractions(text) {
   const sortedContractions = contractions.sort((a, b) => b.word.length - a.word.length);
   for (let { word, braille } of sortedContractions) {
-    const regex = new RegExp(`\\b${word.replace('.', '\\.')}\\b`, 'i');
-    text = text.replace(regex, (match) => {
-      // Preserve case for proper nouns in contractions
-      if (match[0] === match[0].toUpperCase()) {
-        return '⠠' + braille;
-      }
-      return braille;
-    });
+    const regex = new RegExp(`\\b${word.replace('.', '\\.')}\\b`, 'g');
+    text = text.replace(regex, braille);
   }
+  console.log("After contractions:", text);
   return text;
 }
 
